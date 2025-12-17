@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "pocket-app",
-    "slug": "pocket-app",
+    "name": "PhotoSharing",
+    "slug": "PhotoSharing",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "pocketapp",
-    "userInterfaceStyle": "automatic",
+    "scheme": "PhotoSharing",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
