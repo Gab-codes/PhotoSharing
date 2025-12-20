@@ -1,17 +1,12 @@
-import { Text, View } from "react-native";
+import { Link } from "expo-router";
+import { View } from "react-native";
 
 export default function Index() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text className="text-white text-2xl font-bold">
-        Edit app/index.tsx to edit this new screen.
-      </Text>
+    <View className="flex-1 justify-center items-center">
+      <Link href="/camera" className="text-2xl text-white">
+        Open Camera
+      </Link>
     </View>
   );
 }
