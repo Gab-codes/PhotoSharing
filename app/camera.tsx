@@ -1,3 +1,4 @@
+import { uploadToCloudinary } from "@/lib/cloudinary";
 import { Ionicons } from "@expo/vector-icons";
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import { useRef, useState } from "react";
@@ -40,7 +41,9 @@ export default function CameraScreen() {
 
   async function takePhoto() {
     const photo = await camera.current?.takePictureAsync();
-    console.log(JSON.stringify(photo, null, 2));
+    if (!photo?.uri) return;
+    const cloudinaryResponse = await uploadToCloudinary(photo.uri);
+    console.log(cloudinaryResponse);
   }
 
   return (
