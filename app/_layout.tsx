@@ -1,31 +1,43 @@
+import AuthProvider from "@/providers/AuthProvider";
 import { Ionicons } from "@expo/vector-icons";
 import { DarkTheme, ThemeProvider } from "@react-navigation/native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Link, Stack } from "expo-router";
 import "../global.css";
+
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
   return (
     <ThemeProvider value={DarkTheme}>
-      <Stack>
-        <Stack.Screen
-          name="index"
-          options={{ title: "Events", headerLargeTitle: true }}
-        />
-        <Stack.Screen
-          name="camera"
-          options={{
-            title: "Camera",
-            headerBackButtonDisplayMode: "minimal",
-            headerTransparent: true,
-            headerBlurEffect: "dark",
-            headerRight: () => (
-              <Link href="/" asChild>
-                <Ionicons name="share-outline" size={24} color="white" />
-              </Link>
-            ),
-          }}
-        />
-      </Stack>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <Stack>
+            <Stack.Screen
+              name="index"
+              options={{
+                title: "Events",
+                headerLargeTitle: true,
+                headerTransparent: true,
+              }}
+            />
+            <Stack.Screen
+              name="camera"
+              options={{
+                title: "Camera",
+                headerBackButtonDisplayMode: "minimal",
+                headerTransparent: true,
+                headerBlurEffect: "dark",
+                headerRight: () => (
+                  <Link href="/" asChild>
+                    <Ionicons name="share-outline" size={24} color="white" />
+                  </Link>
+                ),
+              }}
+            />
+          </Stack>
+        </AuthProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }
