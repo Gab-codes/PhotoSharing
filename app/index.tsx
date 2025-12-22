@@ -1,5 +1,5 @@
 import EventListItem from "@/components/event-list-item";
-import { getEvents } from "@/services/event";
+import { getEvents } from "@/services/events";
 import { useQuery } from "@tanstack/react-query";
 import { ActivityIndicator, FlatList, Text } from "react-native";
 
