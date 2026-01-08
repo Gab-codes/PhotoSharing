@@ -1,6 +1,10 @@
 import { uploadToCloudinary } from "@/lib/cloudinary";
+import { useAuth } from "@/providers/AuthProvider";
+import { insertAsset } from "@/services/assets";
 import { Ionicons } from "@expo/vector-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
+import { useLocalSearchParams } from "expo-router";
 import { useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -15,16 +19,27 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function CameraScreen() {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const insertAssetMutation = useMutation({
+    mutationFn: (assetId: string) =>
+      insertAsset({ event_id: id, user_id: user?.id, asset_id: assetId }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["events", id],
+      });
+    },
+  });
 
   const camera = useRef<CameraView>(null);
 
   if (!permission) {
-    // Camera permissions are still loading.
     return <ActivityIndicator />;
   }
 
   if (!permission.granted) {
-    // Camera permissions are not granted yet.
     return (
       <View style={styles.container}>
         <Text style={styles.message}>
@@ -44,6 +59,9 @@ export default function CameraScreen() {
     if (!photo?.uri) return;
     const cloudinaryResponse = await uploadToCloudinary(photo.uri);
     console.log(cloudinaryResponse);
+
+    // save photo to database asset table
+    insertAssetMutation.mutate(cloudinaryResponse.public_id);
   }
 
   return (
